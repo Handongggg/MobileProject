@@ -15,10 +15,10 @@ public class Taxi extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_texi);
+        setContentView(R.layout.activity_taxi);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle("TEXI");
+        toolbar.setTitle("Taxi");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
