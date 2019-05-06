@@ -14,5 +14,4 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         tools:ignore="MissingConstraints" />
 
-    출처: https://liveonthekeyboard.tistory.com/entry/안드로이드-툴바-사용법-버튼-추가-add-button-to-tool-bar [키위남]
 </android.support.constraint.ConstraintLayout>
