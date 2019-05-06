@@ -19,7 +19,7 @@ public class MainActivity extends AppCompatActivity {
         Imagebutton_bus.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), bus.class);
+                Intent intent = new Intent(getApplicationContext(), Bus.class);
                 startActivity(intent);
             }
         });
@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
         Imagebutton_texi.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), texi.class);
+                Intent intent = new Intent(getApplicationContext(), Taxi.class);
                 startActivity(intent);
             }
         });
