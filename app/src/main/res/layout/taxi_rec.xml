@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_margin="10dp"
+            android:id="@+id/list_taxi"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:src="@drawable/taxi"/>
+
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@id/list_taxi"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.25"
+                android:text="출발지:"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edit_source"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.75"
+                android:textAlignment="textEnd"
+                android:textSize="20dp" />
+        </LinearLayout>
+        <LinearLayout
+        android:id="@+id/linear2"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_toRightOf="@id/list_taxi"
+        android:layout_below="@id/linear1"
+        android:orientation="horizontal"
+        android:weightSum="1">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="목적지:"
+            android:textSize="20dp" />
+
+        <EditText
+            android:id="@+id/edit_dest"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.75"
+            android:textAlignment="textEnd"
+            android:textSize="20dp" />
+    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/linear3"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_toRightOf="@id/list_taxi"
+            android:layout_below="@id/linear2"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="시간:"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edit_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textAlignment="textStart"
+                android:textSize="20dp" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.2"
+                android:text="인원:"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edit_personnel"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.3"
+                android:textAlignment="textStart"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

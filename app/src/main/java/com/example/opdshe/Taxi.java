@@ -23,10 +23,7 @@ public class Taxi extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         ActionBar ab = getSupportActionBar() ;
-
-
 
     }
 
