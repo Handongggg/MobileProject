@@ -1,6 +1,7 @@
 package com.example.opdshe;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +16,8 @@ public class TaxiPosting extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.taxi_posting);
+
+
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("글쓰기");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -27,27 +30,20 @@ public class TaxiPosting extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.toolbar_menu, menu);
+        getMenuInflater().inflate(R.menu.toolbar_posting, menu);
         return true;
     }
-
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.menu_search:
-                Toast.makeText(getApplicationContext()," press search",Toast.LENGTH_SHORT).show();
+            case R.id.menu_posting:
+                Toast.makeText(getApplicationContext(),"등록 되었습니다.",Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.menu_account:
-                Toast.makeText(getApplicationContext()," press account",Toast.LENGTH_SHORT).show();
-                return true;
-            case R.id.menu_logout:
-                Toast.makeText(getApplicationContext()," press logout",Toast.LENGTH_SHORT).show();
-                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
-
 }
