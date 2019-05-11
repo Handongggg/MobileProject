@@ -1,41 +1,26 @@
 package com.example.opdshe;
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 public class Walking extends AppCompatActivity {
     Toolbar toolbar;
-    Button posting;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_taxi);
-        posting=findViewById(R.id.btn_posting);
+        setContentView(R.layout.activity_walking);
+
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Walking");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ActionBar ab = getSupportActionBar() ;
-        posting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),TaxiPosting.class);
-                startActivity(intent);
-            }
-        });
-
     }
 
     @Override

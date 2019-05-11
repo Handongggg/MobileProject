@@ -16,12 +16,11 @@ public class Bus extends AppCompatActivity {
         setContentView(R.layout.activity_bus);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
-        toolbar.setTitle("BUS");
+        toolbar.setTitle("Bus");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
