@@ -30,6 +30,7 @@
         app:layout_constraintTop_toBottomOf="@+id/toolbar">
 
         <EditText
+            android:id="@+id/edit_p_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/dong"
@@ -89,6 +90,7 @@
                 android:textSize="20dp" />
 
             <Spinner
+                android:id="@+id/spn_personnel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:entries="@array/personnel"

@@ -9,7 +9,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Bus"></activity>
+        <activity android:name=".Bus" />
         <activity android:name=".Taxi" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -19,6 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".TaxiPosting"></activity>
-    </application>
 
+    </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
