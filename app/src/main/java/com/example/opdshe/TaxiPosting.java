@@ -26,8 +26,9 @@ public class TaxiPosting extends AppCompatActivity {
     EditText dest;
     Spinner personnel;
     EditText password;
-    TimePicker time;
+    TimePicker timepicker;
     String temp;
+    String temp_time;
     DatabaseReference mDatabase;
 
     @Override
@@ -40,7 +41,7 @@ public class TaxiPosting extends AppCompatActivity {
         dest=findViewById(R.id.edit_p_dest);
         personnel=findViewById(R.id.spn_personnel);
         password=findViewById(R.id.edit_password);
-        time=findViewById(R.id.timepicker);
+        timepicker=findViewById(R.id.timepicker);
         send=findViewById(R.id.btn_post);
         toolbar = findViewById(R.id.toolbar);
         toolbar.setTitle("글쓰기");
@@ -62,10 +63,21 @@ public class TaxiPosting extends AppCompatActivity {
             }
         }
         );
+        timepicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                if(hourOfDay<12){
+                    temp_time="오전 "+hourOfDay+"시"+minute+"분";
+                }
+                else
+                    temp_time="오후 "+(hourOfDay-12)+"시"+minute+"분";
+            }
+        });
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 writePost();
+                finish();
             }
         });
 
@@ -77,6 +89,7 @@ public class TaxiPosting extends AppCompatActivity {
         post.setDest(dest.getText().toString());
         post.setPassword(password.getText().toString());
         post.setPersonnel(temp);
+        post.setTime(temp_time);
         mDatabase.child("post").child(post.getPassword()).setValue(post);
     }
 
