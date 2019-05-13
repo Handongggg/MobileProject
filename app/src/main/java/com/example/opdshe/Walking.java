@@ -1,26 +1,53 @@
 package com.example.opdshe;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.webkit.WebBackForwardList;
+import android.webkit.WebChromeClient;
+import android.webkit.WebView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 public class Walking extends AppCompatActivity {
     Toolbar toolbar;
+    Button sour_button;
+    Button desti_button;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_walking);
 
+        sour_button = (Button)findViewById(R.id.source);
+        desti_button = (Button)findViewById(R.id.destination);
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Walking");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        sour_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent3 = new Intent(Walking.this, DaumWebViewActivity.class);
+                startActivityForResult(intent3,1);
+            }
+        });
+
+        desti_button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v){
+                Intent intent4 = new Intent(Walking.this, DaumWebViewActivity.class);
+                startActivityForResult(intent4,1);
+            }
+        });
     }
 
     @Override
