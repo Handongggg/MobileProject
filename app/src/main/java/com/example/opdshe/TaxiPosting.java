@@ -51,17 +51,17 @@ public class TaxiPosting extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBar ab = getSupportActionBar() ;
         personnel.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                                                @Override
-                                                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                                    temp=personnel.getItemAtPosition(position).toString();
-                                                    Toast.makeText(getApplicationContext(),temp,Toast.LENGTH_SHORT).show();
-                                                }
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                temp=personnel.getItemAtPosition(position).toString();
+                Toast.makeText(getApplicationContext(),temp,Toast.LENGTH_SHORT).show();
+            }
 
-                                                @Override
-                                                public void onNothingSelected(AdapterView<?> parent) {
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
 
-                                                }
-                                            }
+            }
+        }
         );
         timepicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
             @Override
