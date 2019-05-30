@@ -1,60 +1,39 @@
 package com.example.opdshe;
 
+import com.google.firebase.database.Exclude;
+
+import java.util.HashMap;
+import java.util.Map;
+
 public class Post {
-    private String title;
-    private String source;
-    private String dest;
-    private String time;
-    private String personnel;
-    private String password;
+    public String title;
+    public String source;
+    public String dest;
+    public String time;
+    public String personnel;
+    public String password;
 
     public Post(){}
-
-    public String getSource() {
-        return source;
+    public Post(String title, String source, String dest, String time, String personnel, String password){
+        this.title=title;
+        this.source=source;
+        this.dest=dest;
+        this.time=time;
+        this.personnel=personnel;
+        this.password=password;
     }
 
-    public void setSource(String source) {
-        this.source = source;
+    @Exclude
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("title", title);
+        result.put("source", source);
+        result.put("dest", dest);
+        result.put("time", time);
+        result.put("personnel", personnel);
+        result.put("password", password);
+        return result;
     }
 
-    public String getDest() {
-        return dest;
-    }
 
-    public void setDest(String dest) {
-        this.dest = dest;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getPersonnel() {
-        return personnel;
-    }
-
-    public void setPersonnel(String personnel) {
-        this.personnel = personnel;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
 }

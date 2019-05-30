@@ -1,6 +1,7 @@
 package com.example.opdshe;
 
 import android.graphics.Color;
+import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -18,7 +19,14 @@ import android.widget.Toast;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class TaxiPosting extends AppCompatActivity {
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
+public class TaxiPosting extends Taxi {
+    SimpleDateFormat format2 = new SimpleDateFormat ( "HH시mm분");
+
+    Date time = new Date();
     Toolbar toolbar;
     Button send;
     EditText title;
@@ -28,14 +36,21 @@ public class TaxiPosting extends AppCompatActivity {
     EditText password;
     TimePicker timepicker;
     String temp;
-    String temp_time;
-    DatabaseReference mDatabase;
+    String temp_time=format2.format(time);
+
+    /*String PASSWORD;
+    String TITLE;
+    String SOURCE;
+    String DEST;
+    String PERSONNEL;
+    String TIME=temp_time;*/
+    DatabaseReference mPostReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.taxi_posting);
-        mDatabase=FirebaseDatabase.getInstance().getReference();
+        mPostReference=FirebaseDatabase.getInstance().getReference();
         title=findViewById(R.id.edit_p_title);
         source=findViewById(R.id.edit_p_source);
         dest=findViewById(R.id.edit_p_dest);
@@ -76,21 +91,40 @@ public class TaxiPosting extends AppCompatActivity {
         send.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                writePost();
+                Taxi.TITLE=title.getText().toString();
+                Taxi.SOURCE=source.getText().toString();
+                Taxi.DEST=dest.getText().toString();
+                Taxi.PASSWORD=password.getText().toString();
+                Taxi.PERSONNEL=temp;
+                Taxi.TIME=temp_time;
+                writePost(true);
+                getFirebaseDatabase();
                 finish();
             }
         });
 
     }
-    public void writePost(){
-        Post post=new Post();
-        post.setTitle(title.getText().toString());
-        post.setSource(source.getText().toString());
-        post.setDest(dest.getText().toString());
-        post.setPassword(password.getText().toString());
-        post.setPersonnel(temp);
-        post.setTime(temp_time);
-        mDatabase.child("post").child(post.getPassword()).setValue(post);
+    public void writePost(boolean add){
+       /* Post post=new Post();
+        post.title=title.getText().toString();
+        post.source=source.getText().toString();
+        post.dest=dest.getText().toString();
+        post.password=password.getText().toString();
+        post.personnel=temp;
+        post.time=temp_time;
+        mPostReference.child("post").child(post.password).setValue(post);
+        */
+
+        //
+        mPostReference = FirebaseDatabase.getInstance().getReference();
+        Map<String, Object> childUpdates = new HashMap<>();
+        Map<String, Object> postValues = null;
+        if(add){
+            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, PASSWORD);
+            postValues = post.toMap();
+        }
+        childUpdates.put("/POST/" + PASSWORD, postValues);
+        mPostReference.updateChildren(childUpdates);
     }
 
     @Override
