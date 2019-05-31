@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Button temp= findViewById(R.id.btn_temp);
         ImageButton Imagebutton_taxi = (ImageButton) findViewById(R.id.image_taxi);
         ImageButton Imagebutton_bus = (ImageButton) findViewById(R.id.image_bus);
         ImageButton Imagebutton_walking = (ImageButton) findViewById(R.id.image_walking);
@@ -36,6 +37,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v){
                 Intent intent = new Intent(getApplicationContext(), Bus.class);
+                startActivity(intent);
+            }
+        });
+        temp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), Login.class);
                 startActivity(intent);
             }
         });

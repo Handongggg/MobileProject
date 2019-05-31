@@ -4,9 +4,9 @@
     >
 
     <item
-        
-        android:id="@+id/menu_search"
-        android:title="search"
+
+        android:id="@+id/menu_refresh"
+        android:title="refresh"
         app:showAsAction="always" />
     <group>
         <item
@@ -19,5 +19,3 @@
             />
     </group>
 </menu>
-
-

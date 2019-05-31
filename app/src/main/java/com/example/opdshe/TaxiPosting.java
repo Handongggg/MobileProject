@@ -105,17 +105,7 @@ public class TaxiPosting extends Taxi {
 
     }
     public void writePost(boolean add){
-       /* Post post=new Post();
-        post.title=title.getText().toString();
-        post.source=source.getText().toString();
-        post.dest=dest.getText().toString();
-        post.password=password.getText().toString();
-        post.personnel=temp;
-        post.time=temp_time;
-        mPostReference.child("post").child(post.password).setValue(post);
-        */
 
-        //
         mPostReference = FirebaseDatabase.getInstance().getReference();
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
@@ -129,7 +119,7 @@ public class TaxiPosting extends Taxi {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu){
-        getMenuInflater().inflate(R.menu.toolbar_posting, menu);
+        getMenuInflater().inflate(R.menu.toolbar_taxi, menu);
         return true;
     }
     @Override
@@ -138,8 +128,8 @@ public class TaxiPosting extends Taxi {
             case android.R.id.home:
                 finish();
                 return true;
-            case R.id.menu_posting:
-                Toast.makeText(getApplicationContext(),"등록 되었습니다.",Toast.LENGTH_SHORT).show();
+            case R.id.menu_refresh:
+                getFirebaseDatabase();
                 return true;
 
         }
