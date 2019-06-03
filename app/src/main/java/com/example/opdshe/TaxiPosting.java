@@ -110,7 +110,7 @@ public class TaxiPosting extends Taxi {
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
         if(add){
-            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, PASSWORD);
+            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, CURRENT_PERSONNEL, PASSWORD);
             postValues = post.toMap();
         }
         childUpdates.put("/POST/" + PASSWORD, postValues);

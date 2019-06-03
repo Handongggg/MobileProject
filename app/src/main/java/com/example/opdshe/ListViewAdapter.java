@@ -49,7 +49,7 @@ public class ListViewAdapter extends BaseAdapter {
         sourceText.setText(listViewItem.sourceStr);
         destText.setText(listViewItem.destStr);
         timeText.setText(listViewItem.timeStr);
-        personnelText.setText(listViewItem.personnelStr);
+        personnelText.setText(listViewItem.current_personnelStr+"/"+listViewItem.personnelStr);
 
         return convertView;
 
@@ -84,6 +84,7 @@ public class ListViewAdapter extends BaseAdapter {
             item.destStr=str.nextToken();
             item.timeStr=str.nextToken();
             item.personnelStr=str.nextToken();
+            item.current_personnelStr=str.nextToken();
             listViewItemList.add(item);
         }
     }

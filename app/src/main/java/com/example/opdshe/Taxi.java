@@ -33,7 +33,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Taxi extends AppCompatActivity  {
+public class Taxi extends AppCompatActivity   {
     private DatabaseReference mPostReference;
     static SimpleDateFormat format2 = new SimpleDateFormat ( "HH시mm분");
     static Date time = new Date();
@@ -46,6 +46,7 @@ public class Taxi extends AppCompatActivity  {
     static String SOURCE;
     static String DEST;
     static String PERSONNEL;
+    static String CURRENT_PERSONNEL;
     static String TIME=temp_time;
 
 
@@ -130,7 +131,36 @@ public class Taxi extends AppCompatActivity  {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
             Log.d("Num of listviewList", "number = " + adapter.listViewItemList.size());
+            final String[] nowData = arrayData.get(position).split("/");
+            AlertDialog.Builder dialog = new AlertDialog.Builder(Taxi.this);
+            dialog.setTitle("동승 신청")
+                    .setMessage("해당 게시글에 신청하시겠습니까?")
+                    .setPositiveButton("네", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            String temp=nowData[5];
+                            Integer int_temp=Integer.parseInt(temp);
+                            int_temp++;
+                            TITLE=nowData[0];
+                            SOURCE=nowData[1];
+                            DEST=nowData[2];
+                            TIME=nowData[3];
+                            PERSONNEL=nowData[4];
+                            CURRENT_PERSONNEL=Integer.toString(int_temp);
+                            PASSWORD=nowData[6];
+                            postFirebaseDatabase(true);
+                            getFirebaseDatabase();
 
+                        }
+                    })
+                    .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            Toast.makeText(Taxi.this, "삭제를 취소했습니다.", Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .create()
+                    .show();
         }
     };
 
@@ -139,7 +169,7 @@ public class Taxi extends AppCompatActivity  {
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             Log.d("Long Click", "position = " + position);
             final String[] nowData = arrayData.get(position).split("/");
-            PASSWORD = nowData[5];
+            PASSWORD = nowData[6];
             //String viewData = nowData[0] + ", " + nowData[1] + ", " + nowData[2] + ", " + nowData[3]+ ", " + nowData[4]+ ", " + nowData[5];
             final EditText edittext = new EditText(getApplicationContext());
             edittext.setText(PASSWORD);
@@ -168,7 +198,7 @@ public class Taxi extends AppCompatActivity  {
                     })
                     .create()
                     .show();
-            return false;
+            return true;
         }
     };
 
@@ -183,7 +213,7 @@ public class Taxi extends AppCompatActivity  {
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
         if(add){
-            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, PASSWORD);
+            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, CURRENT_PERSONNEL, PASSWORD);
             postValues = post.toMap();
         }
         childUpdates.put("/POST/" +PASSWORD, postValues);
@@ -201,12 +231,12 @@ public class Taxi extends AppCompatActivity  {
                         for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
                             String key = postSnapshot.getKey();
                             Post get = postSnapshot.getValue(Post.class);
-                            String[] info = {get.title, get.source, get.dest, get.time, get.personnel, get.password};
-                            String Result = info[0]+"/"+info[1]+"/"+info[2]+"/"+info[3]+"/"+info[4]+"/"+info[5];
+                            String[] info = {get.title, get.source, get.dest, get.time, get.personnel, get.current_personnel, get.password};
+                            String Result = info[0]+"/"+info[1]+"/"+info[2]+"/"+info[3]+"/"+info[4]+"/"+info[5]+"/"+info[6];
                             arrayData.add(Result);
                             arrayIndex.add(key);
                             Log.d("getFirebaseDatabase", "key: " + key);
-                            Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3]+ info[4]+ info[5]);
+                            Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3]+ info[4]+ info[5]+info[6]);
                         }
                         adapter.clear();
                         adapter.addAll(arrayData);

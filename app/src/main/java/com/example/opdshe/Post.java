@@ -11,15 +11,17 @@ public class Post {
     public String dest;
     public String time;
     public String personnel;
+    public String current_personnel="1";
     public String password;
 
     public Post(){}
-    public Post(String title, String source, String dest, String time, String personnel, String password){
+    public Post(String title, String source, String dest, String time, String personnel, String current_personnel, String password){
         this.title=title;
         this.source=source;
         this.dest=dest;
         this.time=time;
         this.personnel=personnel;
+        this.current_personnel=current_personnel;
         this.password=password;
     }
 
@@ -31,6 +33,7 @@ public class Post {
         result.put("dest", dest);
         result.put("time", time);
         result.put("personnel", personnel);
+        result.put("current_personnel", current_personnel);
         result.put("password", password);
         return result;
     }
