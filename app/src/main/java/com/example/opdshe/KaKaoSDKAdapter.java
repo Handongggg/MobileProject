@@ -8,6 +8,7 @@ import com.kakao.auth.AuthType;
 import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.ISessionConfig;
 import com.kakao.auth.KakaoAdapter;
+import com.kakao.auth.ageauth.DefaultAgeAuthService;
 
 public class KaKaoSDKAdapter extends KakaoAdapter {
 
@@ -23,6 +24,12 @@ public class KaKaoSDKAdapter extends KakaoAdapter {
             public boolean isUsingWebviewTimer() {
                 return false;
             }
+
+            @Override
+            public boolean isSecureMode() {
+                return false;
+            }
+
             @Override
             public ApprovalType getApprovalType() {
                 return ApprovalType.INDIVIDUAL;
@@ -38,7 +45,6 @@ public class KaKaoSDKAdapter extends KakaoAdapter {
     @Override
     public IApplicationConfig getApplicationConfig() {
         return new IApplicationConfig() {
-            @Override
             public Activity getTopActivity() {
                 return GlobalApplication.getCurrentActivity();
             }

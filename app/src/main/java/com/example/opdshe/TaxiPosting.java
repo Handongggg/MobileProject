@@ -32,6 +32,7 @@ public class TaxiPosting extends Taxi {
     EditText title;
     EditText source;
     EditText dest;
+    EditText editor_id;
     Spinner personnel;
     EditText password;
     TimePicker timepicker;
@@ -55,6 +56,7 @@ public class TaxiPosting extends Taxi {
         source=findViewById(R.id.edit_p_source);
         dest=findViewById(R.id.edit_p_dest);
         personnel=findViewById(R.id.spn_personnel);
+        editor_id=findViewById(R.id.edit_editor_id);
         password=findViewById(R.id.edit_password);
         timepicker=findViewById(R.id.timepicker);
         send=findViewById(R.id.btn_post);
@@ -96,7 +98,9 @@ public class TaxiPosting extends Taxi {
                 Taxi.DEST=dest.getText().toString();
                 Taxi.PASSWORD=password.getText().toString();
                 Taxi.PERSONNEL=temp;
+                Taxi.CURRENT_PERSONNEL="1";
                 Taxi.TIME=temp_time;
+                Taxi.EDITOR_ID=editor_id.getText().toString();
                 writePost(true);
                 getFirebaseDatabase();
                 finish();
@@ -110,7 +114,7 @@ public class TaxiPosting extends Taxi {
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
         if(add){
-            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, CURRENT_PERSONNEL, PASSWORD);
+            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, CURRENT_PERSONNEL, PASSWORD, EDITOR_ID);
             postValues = post.toMap();
         }
         childUpdates.put("/POST/" + PASSWORD, postValues);

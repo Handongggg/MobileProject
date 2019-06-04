@@ -41,6 +41,7 @@ import com.kakao.auth.Session;
 import com.kakao.network.ErrorResult;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.response.model.User;
 import com.kakao.usermgmt.response.model.UserProfile;
 import com.kakao.util.exception.KakaoException;
 
@@ -147,8 +148,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
         @Override
         public void onSessionOpened() {
-
-            UserManagement.requestMe(new MeResponseCallback() {
+            UserManagement user= UserManagement.getInstance();
+            user.requestMe(new MeResponseCallback() {
                 @Override
                 public void onFailure(ErrorResult errorResult) {
                     String message = "failed to get user info. msg=" + errorResult;
@@ -195,7 +196,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
     }
     public void requestMe() {
         //유저의 정보를 받아오는 함수
-        UserManagement.requestMe(new MeResponseCallback() {
+        UserManagement user=UserManagement.getInstance();
+        user.requestMe(new MeResponseCallback() {
             @Override
             public void onFailure(ErrorResult errorResult) {
                 Log.e(TAG, "error message=" + errorResult);
@@ -214,6 +216,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             public void onSuccess(UserProfile result) {
                 Log.e("UserProfile", result.toString());
                 Log.e("UserProfile", result.getId() + "");
+                Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
             }
         });
     }

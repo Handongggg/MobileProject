@@ -31,7 +31,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:text="제목:"
+                android:text="제  목:"
                 android:textSize="17dp" />
 
             <TextView
@@ -116,7 +116,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.2"
-                android:text="시간:"
+                android:text="시  간:"
                 android:textSize="17dp" />
 
             <TextView
@@ -124,14 +124,14 @@
                 android:id="@+id/txt_time"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.4"
+                android:layout_weight="0.45"
                 android:textAlignment="textStart"
                 android:textSize="17dp" />
             <TextView
                 android:fontFamily="@font/dong"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="0.2"
+                android:layout_weight="0.15"
                 android:text="인원:"
                 android:textSize="17dp" />
 

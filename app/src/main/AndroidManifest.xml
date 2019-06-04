@@ -14,7 +14,16 @@
         android:theme="@style/AppTheme">
         <activity android:name=".Bus" />
         <activity android:name=".Login"></activity>
-        <activity android:name=".Taxi" />
+        <activity android:name=".Taxi">
+        <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+
+            <data android:scheme="@string/kakao_scheme"
+                android:host="@string/kakaolink_host" />
+        </intent-filter>
+        </activity>
         <activity android:name=".Walking"/>
         <activity android:name=".DaumWebViewActivity"/>
         <activity android:name=".MainActivity">

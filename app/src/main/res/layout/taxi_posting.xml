@@ -119,6 +119,25 @@
                 android:fontFamily="@font/dong"
                 android:textSize="20dp" />
         </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dong"
+                android:text="작성자 ID:"
+                android:textSize="20dp" />
+
+            <EditText
+                android:id="@+id/edit_editor_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/dong"
+                android:textSize="20dp" />
+        </LinearLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"

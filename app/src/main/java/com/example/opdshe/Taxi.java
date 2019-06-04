@@ -25,6 +25,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.kakao.auth.Session;
+import com.kakao.kakaolink.v2.KakaoLinkService;
+import com.kakao.kakaotalk.api.KakaoTalkMessageRequest;
+import com.kakao.kakaotalk.callback.TalkResponseCallback;
+import com.kakao.kakaotalk.v2.KakaoTalkService;
+import com.kakao.network.ErrorResult;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.LogoutResponseCallback;
+import com.kakao.usermgmt.callback.MeResponseCallback;
+import com.kakao.usermgmt.callback.UnLinkResponseCallback;
+import com.kakao.usermgmt.response.model.UserProfile;
+import com.kakao.util.KakaoParameterException;
+import com.kakao.util.helper.log.Logger;
 
 import java.util.ArrayList;
 
@@ -33,13 +46,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class Taxi extends AppCompatActivity   {
+public class Taxi extends AppCompatActivity {
     private DatabaseReference mPostReference;
-    static SimpleDateFormat format2 = new SimpleDateFormat ( "HH시mm분");
+    static SimpleDateFormat format2 = new SimpleDateFormat("HH시mm분");
     static Date time = new Date();
     Toolbar toolbar;
     Button posting;
-    static String temp_time=format2.format(time);
+    static String temp_time = format2.format(time);
 
     static String PASSWORD;
     static String TITLE;
@@ -47,9 +60,8 @@ public class Taxi extends AppCompatActivity   {
     static String DEST;
     static String PERSONNEL;
     static String CURRENT_PERSONNEL;
-    static String TIME=temp_time;
-
-
+    static String TIME = temp_time;
+    static String EDITOR_ID;
 
 
     String ID;
@@ -62,17 +74,18 @@ public class Taxi extends AppCompatActivity   {
     ListViewAdapter adapter;
 
 
-    static ArrayList<String> arrayIndex =  new ArrayList<String>();
+    static ArrayList<String> arrayIndex = new ArrayList<String>();
     static ArrayList<String> arrayData = new ArrayList<String>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taxi);
 
-        adapter= new ListViewAdapter();
+        adapter = new ListViewAdapter();
         //
 
-       //
+        //
         ListView listView = (ListView) findViewById(R.id.db_list_view);
         listView.setAdapter(adapter);
         listView.setOnItemClickListener(onClickListener);
@@ -82,18 +95,18 @@ public class Taxi extends AppCompatActivity   {
 
 
         //
-        posting=findViewById(R.id.btn_posting);
-        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        posting = findViewById(R.id.btn_posting);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitle("Taxi");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ActionBar ab = getSupportActionBar() ;
+        ActionBar ab = getSupportActionBar();
         posting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(getApplicationContext(),TaxiPosting.class);
+                Intent intent = new Intent(getApplicationContext(), TaxiPosting.class);
                 startActivity(intent);
             }
         });
@@ -101,25 +114,25 @@ public class Taxi extends AppCompatActivity   {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu){
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_taxi, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
                 return true;
             case R.id.menu_refresh:
-               getFirebaseDatabase();
+                getFirebaseDatabase();
                 return true;
             case R.id.menu_account:
-                Toast.makeText(getApplicationContext()," press account",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), " press account", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.menu_logout:
-                Toast.makeText(getApplicationContext()," press logout",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), " press logout", Toast.LENGTH_SHORT).show();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -138,25 +151,38 @@ public class Taxi extends AppCompatActivity   {
                     .setPositiveButton("네", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            String temp=nowData[5];
-                            Integer int_temp=Integer.parseInt(temp);
-                            int_temp++;
-                            TITLE=nowData[0];
-                            SOURCE=nowData[1];
-                            DEST=nowData[2];
-                            TIME=nowData[3];
+                            CURRENT_PERSONNEL=nowData[5];
                             PERSONNEL=nowData[4];
-                            CURRENT_PERSONNEL=Integer.toString(int_temp);
-                            PASSWORD=nowData[6];
+                            Integer p_temp=Integer.parseInt(""+PERSONNEL.charAt(0));
+                            Integer c_temp=Integer.parseInt(CURRENT_PERSONNEL);
+                            if(c_temp>=p_temp){
+                                Toast.makeText(Taxi.this, "인원 초과입니다.", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+
+                            String temp = nowData[5];
+                            Integer int_temp = Integer.parseInt(temp);
+                            int_temp++;
+                            TITLE = nowData[0];
+                            SOURCE = nowData[1];
+                            DEST = nowData[2];
+                            TIME = nowData[3];
+                            PERSONNEL = nowData[4];
+                            CURRENT_PERSONNEL = Integer.toString(int_temp);
+                            PASSWORD = nowData[6];
+                            EDITOR_ID=nowData[7];
+
                             postFirebaseDatabase(true);
                             getFirebaseDatabase();
+                            requestSendMemo();
 
                         }
+
                     })
                     .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            Toast.makeText(Taxi.this, "삭제를 취소했습니다.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Taxi.this, "신청을 취소했습니다.", Toast.LENGTH_SHORT).show();
                         }
                     })
                     .create()
@@ -175,17 +201,16 @@ public class Taxi extends AppCompatActivity   {
             edittext.setText(PASSWORD);
             AlertDialog.Builder dialog = new AlertDialog.Builder(Taxi.this);
             dialog.setTitle("데이터 삭제")
-                    .setMessage("해당 데이터를 삭제 하시겠습니까?" + "\n"+"삭제를 원하시면 비밀번호 입력 후\n '네'버튼을 눌러주세요" )
+                    .setMessage("해당 데이터를 삭제 하시겠습니까?" + "\n" + "삭제를 원하시면 비밀번호 입력 후\n '네'버튼을 눌러주세요")
                     .setView(edittext)
                     .setPositiveButton("네", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            if(edittext.getText().toString().equals(PASSWORD)){
+                            if (edittext.getText().toString().equals(PASSWORD)) {
                                 postFirebaseDatabase(false);
                                 getFirebaseDatabase();
                                 Toast.makeText(Taxi.this, "데이터를 삭제했습니다.", Toast.LENGTH_SHORT).show();
-                            }
-                            else
+                            } else
                                 Toast.makeText(Taxi.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
 
                         }
@@ -202,65 +227,123 @@ public class Taxi extends AppCompatActivity   {
         }
     };
 
-    public boolean IsExistID(){
+    public boolean IsExistID() {
         boolean IsExist = arrayIndex.contains(PASSWORD);
         return IsExist;
     }
 
-    public void postFirebaseDatabase(boolean add){
+    public void postFirebaseDatabase(boolean add) {
 
         mPostReference = FirebaseDatabase.getInstance().getReference();
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
-        if(add){
-            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, CURRENT_PERSONNEL, PASSWORD);
+        if (add) {
+            Post post = new Post(TITLE, SOURCE, DEST, TIME, PERSONNEL, CURRENT_PERSONNEL, PASSWORD, EDITOR_ID);
             postValues = post.toMap();
         }
-        childUpdates.put("/POST/" +PASSWORD, postValues);
+        childUpdates.put("/POST/" + PASSWORD, postValues);
         mPostReference.updateChildren(childUpdates);
     }
 
-    public void getFirebaseDatabase(){
+    public void getFirebaseDatabase() {
 
-                ValueEventListener postListener = new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        Log.e("getFirebaseDatabase", "key: " + dataSnapshot.getChildrenCount());
-                        arrayData.clear();
-                        arrayIndex.clear();
-                        for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                            String key = postSnapshot.getKey();
-                            Post get = postSnapshot.getValue(Post.class);
-                            String[] info = {get.title, get.source, get.dest, get.time, get.personnel, get.current_personnel, get.password};
-                            String Result = info[0]+"/"+info[1]+"/"+info[2]+"/"+info[3]+"/"+info[4]+"/"+info[5]+"/"+info[6];
-                            arrayData.add(Result);
-                            arrayIndex.add(key);
-                            Log.d("getFirebaseDatabase", "key: " + key);
-                            Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3]+ info[4]+ info[5]+info[6]);
-                        }
-                        adapter.clear();
-                        adapter.addAll(arrayData);
-                        adapter.notifyDataSetChanged();
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("getFirebaseDatabase", "key: " + dataSnapshot.getChildrenCount());
+                arrayData.clear();
+                arrayIndex.clear();
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String key = postSnapshot.getKey();
+                    Post get = postSnapshot.getValue(Post.class);
+                    String[] info = {get.title, get.source, get.dest, get.time, get.personnel, get.current_personnel, get.password, get.editor_id};
+                    String Result = info[0] + "/" + info[1] + "/" + info[2] + "/" + info[3] + "/" + info[4] + "/" + info[5] + "/" + info[6]+ "/" + info[7];
+                    arrayData.add(Result);
+                    arrayIndex.add(key);
+                    Log.d("getFirebaseDatabase", "key: " + key);
+                    Log.d("getFirebaseDatabase", "info: " + info[0] + info[1] + info[2] + info[3] + info[4] + info[5] + info[6] +info[7]);
+                }
+                adapter.clear();
+                adapter.addAll(arrayData);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.w("getFirebaseDatabase","loadPost:onCancelled", databaseError.toException());
+                Log.w("getFirebaseDatabase", "loadPost:onCancelled", databaseError.toException());
             }
         };
         Query sortbyAge = FirebaseDatabase.getInstance().getReference().child("POST").orderByChild(sort);
         sortbyAge.addListenerForSingleValueEvent(postListener);
     }
 
-    public String setTextLength(String text, int length){
-        if(text.length()<length){
+    public String setTextLength(String text, int length) {
+        if (text.length() < length) {
             int gap = length - text.length();
-            for (int i=0; i<gap; i++){
+            for (int i = 0; i < gap; i++) {
                 text = text + " ";
             }
         }
         return text;
     }
+
+    public void requestSendMemo() {
+        KakaoTalkMessageBuilder builder = new KakaoTalkMessageBuilder();
+        builder.addParam("TITLE", "제목: "+TITLE+"\n");
+        builder.addParam("SOURCE", "출발지: "+SOURCE+"\n");
+        builder.addParam("DEST", "목적지: "+DEST+"\n");
+        builder.addParam("TIME", "시간: "+TIME+"\n");
+        builder.addParam("EDITOR_ID", "작성자 ID: "+EDITOR_ID+"\n");
+        KakaoTalkService.getInstance().requestSendMemo(new KakaoTalkResponseCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                Logger.d("send message to my chatroom : " + result);
+                Toast.makeText(Taxi.this,"나에게 보내기",Toast.LENGTH_SHORT).show();
+            }
+                                                       }
+                , "16632" // templateId
+                , builder.build());
+    }
+
+    //카카오톡 메시지 내용 맵
+    public class KakaoTalkMessageBuilder {
+        public Map<String, String> messageParams = new HashMap<String, String>();
+
+        public KakaoTalkMessageBuilder addParam(String key, String value) {
+            messageParams.put("${" + key + "}", value);
+            return this;
+        }
+
+        public Map<String, String> build() {
+            return messageParams;
+        }
+    }
+    //카카오톡 콜백 클래스
+    private abstract class KakaoTalkResponseCallback<T> extends TalkResponseCallback<T> {
+        @Override
+        public void onNotKakaoTalkUser() {
+            Logger.w("not a KakaoTalk user");
+        }
+
+        @Override
+        public void onFailure(ErrorResult errorResult) {
+            Toast.makeText(getApplicationContext(),"전송 실패",Toast.LENGTH_LONG).show();
+            Logger.e("failure : " + errorResult);
+        }
+
+        @Override
+        public void onSessionClosed(ErrorResult errorResult) {
+            //redirectLoginActivity();
+//재로그인!
+        }
+
+        @Override
+        public void onNotSignedUp() {
+            //redirectSignupActivity();
+//재로그인!
+        }
+    }
+
 
 
 }
