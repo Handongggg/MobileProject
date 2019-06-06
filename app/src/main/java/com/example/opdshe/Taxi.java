@@ -63,6 +63,10 @@ public class Taxi extends AppCompatActivity {
     static String TIME = temp_time;
     static String EDITOR_ID;
 
+    static String  USER_ID;
+    static ArrayList<String> POST_LIST =new ArrayList<>();
+
+
 
     String ID;
     String name;
@@ -81,7 +85,12 @@ public class Taxi extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taxi);
-
+        toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitle("Taxi");
+        toolbar.setTitleTextColor(Color.WHITE);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         adapter = new ListViewAdapter();
         //
 
@@ -96,13 +105,7 @@ public class Taxi extends AppCompatActivity {
 
         //
         posting = findViewById(R.id.btn_posting);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setTitle("Taxi");
-        toolbar.setTitleTextColor(Color.WHITE);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        ActionBar ab = getSupportActionBar();
+
         posting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -127,10 +130,19 @@ public class Taxi extends AppCompatActivity {
             case R.id.menu_refresh:
                 getFirebaseDatabase();
                 return true;
-            case R.id.menu_account:
-                Toast.makeText(getApplicationContext(), " press account", Toast.LENGTH_SHORT).show();
+            case R.id.menu_mypage:
+                Toast.makeText(getApplicationContext(), " press My page", Toast.LENGTH_SHORT).show();
+                Intent intent= new Intent(Taxi.this, Taxi_MyPage.class);
+                startActivity(intent);
                 return true;
             case R.id.menu_logout:
+                UserManagement.getInstance().requestLogout(new LogoutResponseCallback() {
+                    @Override
+                    public void onCompleteLogout() {
+                        Intent intent =new Intent(Taxi.this, Login.class);
+                        startActivity(intent);
+                    }
+                });
                 Toast.makeText(getApplicationContext(), " press logout", Toast.LENGTH_SHORT).show();
                 return true;
         }
@@ -170,7 +182,8 @@ public class Taxi extends AppCompatActivity {
                             CURRENT_PERSONNEL = Integer.toString(int_temp);
                             PASSWORD = nowData[6];
                             EDITOR_ID=nowData[7];
-
+                            POST_LIST.add(TITLE);
+                            postDataList(true);
                             postFirebaseDatabase(true);
                             getFirebaseDatabase();
                             requestSendMemo();
@@ -241,6 +254,19 @@ public class Taxi extends AppCompatActivity {
             postValues = post.toMap();
         }
         childUpdates.put("/POST/" + PASSWORD, postValues);
+        mPostReference.updateChildren(childUpdates);
+    }
+
+    public void postDataList(boolean add) {
+
+        mPostReference = FirebaseDatabase.getInstance().getReference();
+        Map<String, Object> childUpdates = new HashMap<>();
+        Map<String, Object> postValues = null;
+        if (add) {
+            User user = new User(USER_ID,POST_LIST);
+            postValues = user.toMap();
+        }
+        childUpdates.put("/LIST/" + USER_ID, postValues);
         mPostReference.updateChildren(childUpdates);
     }
 

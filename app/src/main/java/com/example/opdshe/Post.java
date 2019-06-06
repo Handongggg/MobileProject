@@ -2,6 +2,7 @@ package com.example.opdshe;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,9 +15,11 @@ public class Post {
     public String current_personnel="1";
     public String password;
     public String editor_id;
+    //public ArrayList<String> user_id;
 
     public Post(){}
-    public Post(String title, String source, String dest, String time, String personnel, String current_personnel, String password, String editor_id){
+    public Post(String title, String source, String dest, String time, String personnel,
+                String current_personnel, String password, String editor_id){
         this.title=title;
         this.source=source;
         this.dest=dest;
@@ -25,6 +28,7 @@ public class Post {
         this.current_personnel=current_personnel;
         this.password=password;
         this.editor_id=editor_id;
+       // this.user_id=user_id;
     }
 
     @Exclude
@@ -38,6 +42,7 @@ public class Post {
         result.put("current_personnel", current_personnel);
         result.put("password", password);
         result.put("editor_id", editor_id);
+        //result.put("user_id", user_id);
         return result;
     }
 

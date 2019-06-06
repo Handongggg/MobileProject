@@ -13,7 +13,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".Bus" />
-        <activity android:name=".Login"></activity>
+        <activity android:name=".Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".Taxi">
         <intent-filter>
             <action android:name="android.intent.action.VIEW" />
@@ -25,13 +31,9 @@
         </intent-filter>
         </activity>
         <activity android:name=".Walking"/>
+        <activity android:name=".Taxi_MyPage"></activity>
         <activity android:name=".DaumWebViewActivity"/>
         <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".TaxiPosting"></activity>
 

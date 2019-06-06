@@ -10,12 +10,12 @@
         app:showAsAction="always" />
     <group>
         <item
-            android:id="@+id/menu_account"
-            android:title="account"
+            android:id="@+id/menu_mypage"
+            android:title="My page"
             />
         <item
             android:id="@+id/menu_logout"
-            android:title="logout"
+            android:title="Logout"
             />
     </group>
 </menu>

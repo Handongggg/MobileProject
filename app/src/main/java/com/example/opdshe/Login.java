@@ -182,6 +182,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
 
 
                     long number = userProfile.getId();
+                    Intent intent= new Intent(Login.this, MainActivity.class);
+                    startActivity(intent);
 
 
                 }
@@ -216,7 +218,12 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
             public void onSuccess(UserProfile result) {
                 Log.e("UserProfile", result.toString());
                 Log.e("UserProfile", result.getId() + "");
-                Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+                Taxi.USER_ID=result.getId()+"";
+                Taxi_MyPage.MYPAGE_ID=result.getId()+"";
+                Taxi_MyPage.MYPAGE_NICKNAME=result.getNickname();
+                Taxi_MyPage.MYPAGE_IMAGE=result.getThumbnailImagePath();
+                //Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
+
             }
         });
     }

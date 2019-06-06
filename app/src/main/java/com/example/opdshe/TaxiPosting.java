@@ -18,6 +18,10 @@ import android.widget.Toast;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.kakao.usermgmt.UserManagement;
+import com.kakao.usermgmt.callback.MeV2ResponseCallback;
+import com.kakao.usermgmt.response.MeV2Response;
+import com.kakao.usermgmt.response.model.UserProfile;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -46,6 +50,7 @@ public class TaxiPosting extends Taxi {
     String PERSONNEL;
     String TIME=temp_time;*/
     DatabaseReference mPostReference;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,6 +106,7 @@ public class TaxiPosting extends Taxi {
                 Taxi.CURRENT_PERSONNEL="1";
                 Taxi.TIME=temp_time;
                 Taxi.EDITOR_ID=editor_id.getText().toString();
+                //Taxi.USER_ID.add();
                 writePost(true);
                 getFirebaseDatabase();
                 finish();
@@ -108,6 +114,7 @@ public class TaxiPosting extends Taxi {
         });
 
     }
+
     public void writePost(boolean add){
 
         mPostReference = FirebaseDatabase.getInstance().getReference();
