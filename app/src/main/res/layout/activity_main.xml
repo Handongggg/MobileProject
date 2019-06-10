@@ -19,30 +19,41 @@
         />
 
     <ImageView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="420dp"
         android:layout_margin="10dp"
-        android:src="@drawable/image"/>
+        android:src="@drawable/main_background"/>
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="2">
-        <Button
+        android:layout_height="fill_parent"
+        android:weightSum="3">
+        <ImageView
+            android:clickable="true"
             android:text="Taxi"
+            android:src="@drawable/taxi_icon"
             android:id="@+id/image_taxi"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:src="@drawable/taxi"/>
+            />
 
 
-        <Button
-            android:text="Walking"
+        <ImageView
             android:id="@+id/image_walking"
+            android:clickable="true"
+            android:src="@drawable/walking_icon"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:src="@drawable/walking" />
+            />
+        <ImageView
+            android:clickable="true"
+            android:id="@+id/image_bus"
+            android:src="@drawable/bus_icon"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            />
     </LinearLayout>
 
 

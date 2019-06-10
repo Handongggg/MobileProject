@@ -321,12 +321,8 @@ public class Taxi extends AppCompatActivity {
                     if(user.post_list!=null){
                         POST_LIST=user.post_list;
                     }
-
-
                 }
-
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.w("getFirebaseDatabase", "loadPost:onCancelled", databaseError.toException());

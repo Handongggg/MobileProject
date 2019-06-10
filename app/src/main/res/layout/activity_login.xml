@@ -7,23 +7,14 @@
     android:padding="0dp"
     android:orientation="vertical">
 
-    <com.google.android.gms.common.SignInButton
-        android:id="@+id/Google_Login"
-        android:layout_width="310dp"
-        android:layout_height="50dp"
-        android:layout_gravity="center"
-        android:layout_marginLeft="25dp"
-        android:layout_marginTop="470dp"
-        android:layout_marginRight="25dp"
-        android:layout_marginBottom="15dp">
-    </com.google.android.gms.common.SignInButton>
+
     <com.kakao.usermgmt.LoginButton
         android:id="@+id/com_kakao_login"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_gravity="center"
         android:layout_marginLeft="25dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="520dp"
         android:layout_marginRight="25dp"
         android:layout_marginBottom="15dp"/>
 
