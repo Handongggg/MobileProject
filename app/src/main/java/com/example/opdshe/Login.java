@@ -181,6 +181,8 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                      //Log.e("UserProfile", userProfile.getId() + "");
 
 
+                    Log.e("UserProfile", userProfile.toString());
+                    Log.e("UserProfile", userProfile.getId() + "");
                     Taxi.USER_ID=userProfile.getId()+"";
                     Taxi_MyPage.MYPAGE_ID=userProfile.getId()+"";
                     Taxi_MyPage.MYPAGE_NICKNAME=userProfile.getNickname();

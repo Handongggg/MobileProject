@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
         Imagebutton_walking.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                Intent intent = new Intent(getApplicationContext(), Walking.class);
+                Intent intent = new Intent(getApplicationContext(), DaumWebViewActivity.class);
                 startActivity(intent);
             }
         });

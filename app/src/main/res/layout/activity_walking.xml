@@ -6,8 +6,9 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/relativeLayout"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="400dp"
         android:orientation="vertical"
         app:layout_constraintTop_toBottomOf="@id/toolbar">
 
@@ -24,7 +25,7 @@
         <LinearLayout
             android:id="@+id/linear1"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/list_taxi"
             android:orientation="horizontal"
@@ -38,19 +39,19 @@
                 android:text="출발지:"
                 android:textSize="15dp" />
 
-            <Button
-                android:id="@+id/source"
+            <EditText
+                android:id="@+id/star"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="0.7"
-                android:fontFamily="@font/dong"
-                android:text="버튼을 눌러 출발지를 고르세요." />
+                android:text="출발지"/>
+
         </LinearLayout>
 
         <LinearLayout
             android:id="@+id/linear2"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="40dp"
             android:layout_below="@id/linear1"
             android:layout_marginLeft="10dp"
             android:layout_toRightOf="@id/list_taxi"
@@ -65,13 +66,13 @@
                 android:text="목적지:"
                 android:textSize="15dp" />
 
-            <Button
-                android:id="@+id/destination"
+            <EditText
+                android:id="@+id/des"
                 android:layout_width="0dp"
-                android:layout_height="35dp"
+                android:layout_height="40dp"
                 android:layout_weight="0.7"
-                android:fontFamily="@font/dong"
-                android:text="버튼을 눌러 목적지를 고르세요." />
+                android:text="목적지" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -98,6 +99,14 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="0.3" />
 
+            <Button
+                android:id="@+id/check"
+                android:layout_width="100dp"
+                android:layout_height="35dp"
+                android:layout_weight="0.15"
+                android:fontFamily="@font/dong"
+                android:text="체크 후 확인" />
+
         </LinearLayout>
 
     </RelativeLayout>
@@ -111,4 +120,29 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         tools:ignore="MissingConstraints" />
 
+    <Button
+        android:id="@+id/button"
+        android:layout_width="410dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="32dp"
+        android:onClick="way"
+        android:text="경로 안내"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/present_button"
+        android:layout_width="410dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="80dp"
+        android:onClick="way"
+        android:text="CCTV조회"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 </android.support.constraint.ConstraintLayout>
