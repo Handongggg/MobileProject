@@ -181,7 +181,11 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                      //Log.e("UserProfile", userProfile.getId() + "");
 
 
-                    long number = userProfile.getId();
+                    Taxi.USER_ID=userProfile.getId()+"";
+                    Taxi_MyPage.MYPAGE_ID=userProfile.getId()+"";
+                    Taxi_MyPage.MYPAGE_NICKNAME=userProfile.getNickname();
+                    Taxi_MyPage.MYPAGE_IMAGE=userProfile.getThumbnailImagePath();
+                    Taxi_MyPage.MYPAGE_EMAIL=userProfile.getEmail();
                     Intent intent= new Intent(Login.this, MainActivity.class);
                     startActivity(intent);
 
