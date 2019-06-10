@@ -64,7 +64,7 @@ public class Taxi extends AppCompatActivity {
     static String EDITOR_ID;
 
     static String  USER_ID;
-    static ArrayList<String> POST_LIST =new ArrayList<>();
+    static ArrayList<String> POST_LIST=new ArrayList<>();
 
 
 
@@ -85,6 +85,7 @@ public class Taxi extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_taxi);
+        getList();
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         toolbar.setTitle("Taxi");
         toolbar.setTitleTextColor(Color.WHITE);
@@ -92,6 +93,7 @@ public class Taxi extends AppCompatActivity {
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         adapter = new ListViewAdapter();
+
         //
 
         //
@@ -101,6 +103,7 @@ public class Taxi extends AppCompatActivity {
         listView.setOnItemLongClickListener(longClickListener);
 
         getFirebaseDatabase();
+
 
 
         //
@@ -291,6 +294,7 @@ public class Taxi extends AppCompatActivity {
                 adapter.clear();
                 adapter.addAll(arrayData);
                 adapter.notifyDataSetChanged();
+                Log.d("check firebase", "checking firebase data");
             }
 
             @Override
@@ -299,6 +303,36 @@ public class Taxi extends AppCompatActivity {
             }
         };
         Query sortbyAge = FirebaseDatabase.getInstance().getReference().child("POST").orderByChild(sort);
+        sortbyAge.addListenerForSingleValueEvent(postListener);
+    }
+
+    public void getList() {
+        if(POST_LIST!=null){
+            POST_LIST.clear();
+        }
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.e("getFirebaseDatabase", "key: " + dataSnapshot.getChildrenCount());
+
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    User user = postSnapshot.getValue(User.class);
+                    if(user.post_list!=null){
+                        POST_LIST=user.post_list;
+                    }
+
+
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("getFirebaseDatabase", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        Query sortbyAge = FirebaseDatabase.getInstance().getReference().child("LIST").orderByChild(sort);
         sortbyAge.addListenerForSingleValueEvent(postListener);
     }
 

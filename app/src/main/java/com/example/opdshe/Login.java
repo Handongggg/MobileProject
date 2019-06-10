@@ -222,6 +222,7 @@ public class Login extends AppCompatActivity implements GoogleApiClient.OnConnec
                 Taxi_MyPage.MYPAGE_ID=result.getId()+"";
                 Taxi_MyPage.MYPAGE_NICKNAME=result.getNickname();
                 Taxi_MyPage.MYPAGE_IMAGE=result.getThumbnailImagePath();
+                Taxi_MyPage.MYPAGE_EMAIL=result.getEmail();
                 //Toast.makeText(Login.this, "로그인 성공", Toast.LENGTH_SHORT).show();
 
             }

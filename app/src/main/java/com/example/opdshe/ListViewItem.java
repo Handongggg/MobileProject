@@ -10,5 +10,4 @@ public class ListViewItem {
     public String personnelStr;
     public String current_personnelStr;
 
-
 }

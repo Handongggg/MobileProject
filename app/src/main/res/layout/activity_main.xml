@@ -5,31 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#ffffff">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#FFFFFF"
+        app:layout_constraintTop_toTopOf="parent"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        />
 
-    <ImageButton
-        android:id="@+id/image_walking"
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="420dp"
+        android:layout_margin="10dp"
+        android:src="@drawable/image"/>
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher" />
+        android:layout_weight="2">
+        <Button
+            android:text="Taxi"
+            android:id="@+id/image_taxi"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:src="@drawable/taxi"/>
 
-    <ImageButton
-        android:id="@+id/image_bus"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher" />
 
-    <ImageButton
-        android:id="@+id/image_taxi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:src="@mipmap/ic_launcher_round" />
-    <Button
-        android:id="@+id/btn_temp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="temp"/>
+        <Button
+            android:text="Walking"
+            android:id="@+id/image_walking"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/walking" />
+    </LinearLayout>
+
+
+
 
 </LinearLayout>

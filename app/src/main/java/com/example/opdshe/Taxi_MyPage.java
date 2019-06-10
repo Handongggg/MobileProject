@@ -1,32 +1,21 @@
 package com.example.opdshe;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Canvas;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.PersistableBundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +30,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.kakao.usermgmt.UserManagement;
 import com.kakao.usermgmt.callback.LogoutResponseCallback;
 
+import java.io.InputStream;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,31 +41,70 @@ public class Taxi_MyPage extends Taxi  {
     static String MYPAGE_NICKNAME;
     static String MYPAGE_ID;
     static String MYPAGE_IMAGE;
+    static String MYPAGE_EMAIL;
     CircularImageView image_profile;
+    String REMOVE_LIST;
 
-
-
+    
     TextView txt_profile;
-    ArrayAdapter<String> listAdapter;
+    TextView txt_email;
+    ListAdapter listAdapter;
+    //static ArrayAdapter<String> listAdapter;
     static ArrayList<String> listIndex =  new ArrayList<String>();
     static ArrayList<String> listData = new ArrayList<String>();
     Toolbar toolbar;
+    Handler handler = new Handler();
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.taxi_mypage);
         getListDatabase();
+        getList();
         toolbar =findViewById(R.id.toolbar);
-        toolbar.setTitle("Mypage");
+        toolbar.setTitle("My List");
         toolbar.setTitleTextColor(Color.WHITE);
         txt_profile=findViewById(R.id.txt_name);
         txt_profile.setText(MYPAGE_NICKNAME);
+        txt_email=findViewById(R.id.txt_email);
+        txt_email.setText(MYPAGE_EMAIL);
+        image_profile=findViewById(R.id.img_profile);
+
+
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO Auto-generated method stub
+                try{
+                    final CircularImageView iv = findViewById(R.id.img_profile);
+                    URL url = new URL(MYPAGE_IMAGE);
+                    InputStream is = url.openStream();
+                    final Bitmap bm = BitmapFactory.decodeStream(is);
+                    handler.post(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            iv.setImageBitmap(bm);
+                        }
+                    });
+                    iv.setImageBitmap(bm);
+                } catch(Exception e){
+
+                }
+
+            }
+        });
+
+        t.start();
+
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         ActionBar ab = getSupportActionBar();
         image_profile=findViewById(R.id.img_profile);
-        listAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1);
+        listAdapter = new ListAdapter();
         ListView listView = (ListView) findViewById(R.id.mp_list_view);
         listView.setAdapter(listAdapter);
         listView.setOnItemLongClickListener(longClickListener);
@@ -91,6 +121,7 @@ public class Taxi_MyPage extends Taxi  {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
+                //getFirebaseDatabase();
                 finish();
                 return true;
             case R.id.menu_refresh:
@@ -119,16 +150,19 @@ public class Taxi_MyPage extends Taxi  {
         @Override
         public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
             Log.d("Long Click", "position = " + position);
-            final String[] nowListData = listData.get(position).split("/");
+            final String nowListData = listData.get(position);
+            REMOVE_LIST=nowListData;
+            Log.d("String temp", "String temp:" + nowListData.toString());
             android.app.AlertDialog.Builder dialog = new AlertDialog.Builder(Taxi_MyPage.this);
             dialog.setTitle("데이터 삭제")
                     .setMessage("신청을 취소하시겠습니까?" + "\n" )
                     .setPositiveButton("네", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-
+                                POST_LIST.remove(nowListData);
                                 postDataList(false);
                                 getListDatabase();
+                                removeList();
                                 Toast.makeText(Taxi_MyPage.this, "신청을 취소했습니다.", Toast.LENGTH_SHORT).show();
                         }
                     })
@@ -148,10 +182,9 @@ public class Taxi_MyPage extends Taxi  {
         mPostReference = FirebaseDatabase.getInstance().getReference();
         Map<String, Object> childUpdates = new HashMap<>();
         Map<String, Object> postValues = null;
-        if (add) {
-            User user = new User(USER_ID,POST_LIST);
-            postValues = user.toMap();
-        }
+        User user = new User(USER_ID,POST_LIST);
+        postValues = user.toMap();
+
         childUpdates.put("/LIST/" + USER_ID, postValues);
         mPostReference.updateChildren(childUpdates);
     }
@@ -161,19 +194,20 @@ public class Taxi_MyPage extends Taxi  {
         ValueEventListener postListener = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.e("getFirebaseDatabase", "key: " + dataSnapshot.getChildrenCount());
                 listData.clear();
                 listIndex.clear();
                 for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
                     String listkey = postSnapshot.getKey();
                     User user = postSnapshot.getValue(User.class);
-                    String[] info = {user.id,user.post_list.toString()};
-                    Log.d("checkinfo", "check: " + info);
-                    String listResult = info[0] + "/" + info[1];
-                    listData.add(listResult);
-                    listIndex.add(listkey);
+                    //Log.d("temp",user.post_list.toString());
+                    if(user.post_list!=null){
+                        for(int i=0;i<user.post_list.size();i++){
+                            listData.add(user.post_list.get(i));
+                            listIndex.add(listkey);
+                        }
+                    }
                     Log.d("getFirebaseDatabase", "key: " + listkey);
-                    Log.d("getFirebaseDatabase", "info: " + info[0] + info[1]);
+
                 }
                 listAdapter.clear();
                 listAdapter.addAll(listData);
@@ -188,6 +222,44 @@ public class Taxi_MyPage extends Taxi  {
         Query sortbyAge = FirebaseDatabase.getInstance().getReference().child("LIST").orderByChild(sort);
         sortbyAge.addListenerForSingleValueEvent(postListener);
     }
+
+    public void removeList() {
+
+        ValueEventListener postListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+                    String key = postSnapshot.getKey();
+                    Post get = postSnapshot.getValue(Post.class);
+                    if(REMOVE_LIST.equals(get.title)){
+
+                        TITLE=get.title;
+                        SOURCE=get.source;
+                        DEST=get.dest;
+                        TIME=get.time;
+                        PERSONNEL=get.personnel;
+                        int temp= Integer.parseInt(get.current_personnel);
+                        temp=temp-1;
+                        CURRENT_PERSONNEL=Integer.toString(temp);
+                        PASSWORD=get.password;
+                        EDITOR_ID=get.editor_id;
+                    }
+
+                }
+                postFirebaseDatabase(true);
+                getFirebaseDatabase();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w("getFirebaseDatabase", "loadPost:onCancelled", databaseError.toException());
+            }
+        };
+        Query sortbyAge = FirebaseDatabase.getInstance().getReference().child("POST").orderByChild(sort);
+        sortbyAge.addListenerForSingleValueEvent(postListener);
+    }
+
+
 
 
 }
