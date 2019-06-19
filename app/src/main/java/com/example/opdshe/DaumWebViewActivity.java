@@ -81,7 +81,7 @@ public class DaumWebViewActivity extends AppCompatActivity {
             if(start != null) {
                 temp = start;
             }
-            i =0;
+            i =-1;
             desti = (String) daum_result.getText();
             Intent intent = new Intent(this, Walking.class);
             intent.putExtra("start",temp);

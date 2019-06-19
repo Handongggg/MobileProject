@@ -37,10 +37,11 @@
 
         android:gravity="center"
 
-        android:text="Result" />
+        android:text="주소를 확인하세요." />
 
     <Button
         android:id="@+id/adress"
+        style="@android:style/Widget.Material.Light.Button.Inset"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:onClick="onClick"
@@ -48,4 +49,5 @@
 
 
 </LinearLayout>
+
 

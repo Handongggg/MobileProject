@@ -5,13 +5,21 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.hardware.camera2.CameraManager;
+
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraCharacteristics;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -25,9 +33,12 @@ import java.util.ArrayList;
 public class Road extends AppCompatActivity implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener {
 
     private static final String LOG_TAG = "MainActivity";
-
+    private CameraManager mCameraManager;
+    private  boolean mFlashOn;
+    private ImageButton mImageButtonFlashOnOff;
     private MapView mMapView;
-
+    private String mCameraId;
+    Button button;
 
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
@@ -41,9 +52,11 @@ public class Road extends AppCompatActivity implements MapView.CurrentLocationEv
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.road_view);
+
         Bundle b = getIntent().getExtras();
         ArrayList<Double> lan = (ArrayList<Double>)b.get("lan");
         ArrayList<Double> lon = (ArrayList<Double>)b.get("lon");
+        button = (Button)findViewById(R.id.button2);
 
         mMapView = (MapView) findViewById(R.id.map_view);
         //mMapView.setDaumMapApiKey(MapApiConst.DAUM_MAPS_ANDROID_APP_API_KEY);
@@ -79,9 +92,29 @@ public class Road extends AppCompatActivity implements MapView.CurrentLocationEv
             mMapView.addPOIItem(marker);
         }
         mMapView.setCurrentLocationEventListener(this);
+
+        mCameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+        mImageButtonFlashOnOff = (ImageButton)findViewById(R.id.ibFlashOnOff);
         //true면 앱 실행 시 애니메이션 효과가 나오고 false면 애니메이션이 나오지않음.
         //mapViewContainer.addView(mapView);
 
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //인텐트 객체 생성
+                //인텐트로 전화 걸기 옵션 선언
+                Intent intent =new Intent(Intent.ACTION_DIAL, Uri.parse("tel:"+ 112));
+                //실행
+                startActivity(intent);
+            }
+        });
+        mImageButtonFlashOnOff.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                flashlight();
+                mImageButtonFlashOnOff.setImageResource(mFlashOn ? R.drawable.flashon : R.drawable.flashoff);
+            }
+        });
 
 
 
@@ -288,5 +321,33 @@ public class Road extends AppCompatActivity implements MapView.CurrentLocationEv
 
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
                 || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+    }
+
+    void flashlight(){
+        if(mCameraId ==null){
+            try{
+                for(String id : mCameraManager.getCameraIdList()){
+                    CameraCharacteristics c = mCameraManager.getCameraCharacteristics(id);
+                    Boolean flashAvailable = c.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
+                    Integer lensFacing = c.get(CameraCharacteristics.LENS_FACING);
+                    if(flashAvailable !=null && flashAvailable
+                            && lensFacing != null && lensFacing == CameraCharacteristics.LENS_FACING_BACK){
+                        mCameraId = id;
+                        break;
+                    }
+                }
+            }catch (CameraAccessException e){
+                mCameraId = null;
+                e.printStackTrace();
+                return;
+            }
+        }
+        mFlashOn = !mFlashOn;
+
+        try{
+            mCameraManager.setTorchMode(mCameraId,mFlashOn);
+        }catch (CameraAccessException e){
+            e.printStackTrace();
+        }
     }
 }

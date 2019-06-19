@@ -17,6 +17,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,8 +36,8 @@ public class Walking extends AppCompatActivity {
     Toolbar toolbar;
     Button button;
     Button present;
-    EditText start;
-    EditText desti;
+    TextView start;
+    TextView desti;
     int i = 1;
     double a = 0;
     double a1 = 0;
@@ -45,8 +47,7 @@ public class Walking extends AppCompatActivity {
     double lon_d = 0;
     ArrayList lan_list = new ArrayList();
     ArrayList lon_list = new ArrayList();
-    CheckBox safe;
-    Button check;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,12 +55,11 @@ public class Walking extends AppCompatActivity {
         setContentView(R.layout.activity_walking);
 
         present = (Button) findViewById(R.id.present_button);
-        safe = (CheckBox)findViewById(R.id.safe_walking);
         button = (Button) findViewById(R.id.button);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
-        start = (EditText) findViewById(R.id.star);
-        desti = (EditText) findViewById(R.id.des);
-        check = (Button)findViewById(R.id.check);
+        start = (TextView) findViewById(R.id.star);
+        desti = (TextView) findViewById(R.id.des);
+
         toolbar.setTitle("Walking");
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
@@ -72,6 +72,9 @@ public class Walking extends AppCompatActivity {
         start.setText(name);
         name = intent.getExtras().getString("desti");
         desti.setText(name);
+        for (i = 1; i < 34; i++) {
+            new GetXMLTask().execute("https://openapi.gg.go.kr/CCTV?KEY=6734cecd49a14e4bb647e6515d8ce56a&pSize=1000&pIndex=" + i);
+        }
 
 
 
@@ -122,18 +125,6 @@ public class Walking extends AppCompatActivity {
                         "daummaps://route?sp=" + start1 + "&ep=" + desti1 + "&by=FOOT";
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
                 startActivity(intent);
-            }
-        });
-
-        check.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(safe.isChecked() == true) {
-
-                    for (i = 1; i < 34; i++) {
-                        new GetXMLTask().execute("https://openapi.gg.go.kr/CCTV?KEY=6734cecd49a14e4bb647e6515d8ce56a&pSize=1000&pIndex=" + i);
-                    }
-                }
             }
         });
 
@@ -236,7 +227,6 @@ public class Walking extends AppCompatActivity {
                         }
                     }
                 }
-
                 Intent intent1 = new Intent(Walking.this, Road.class);
                 Bundle b = new Bundle();
                 intent1.putExtra("bundle",b);
